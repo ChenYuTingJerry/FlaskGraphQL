@@ -1,0 +1,32 @@
+version: '2'
+
+services:
+  server:
+    container_name: flask
+    build: .
+    ports:
+      - '5000:5000'
+    expose:
+      - '5000'
+    volumes:
+      - '.:/usr/src/app'
+    restart: always
+    environment:
+      ENV: DEVELOPMENT
+    depends_on:
+      - mongo
+
+  mongo:
+    container_name: flask-mongodb
+    image: mongo:4.0
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: 'shazam'
+      MONGO_INITDB_ROOT_PASSWORD: 'shazam'
+      MONGO_INITDB_DATABASE: 'graphql'
+    ports:
+      - '27017:27017'
+    expose:
+      - '27017'
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
