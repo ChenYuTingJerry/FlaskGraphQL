@@ -8,6 +8,7 @@ COPY ./requirements.txt /usr/src/app/requirements.txt
 WORKDIR /usr/src/app
 
 # Install requirements
+RUN pip install -U pip
 RUN pip install -r requirements.txt
 
 # Copy the rest
