@@ -23,7 +23,7 @@ class Post(graphene.ObjectType):
 class Query(graphene.ObjectType):
     users = graphene.List(User)
     posts = graphene.List(Post)
-    user = graphene.Field(User, id=graphene.String())
+    user = graphene.Field(User, email=graphene.String())
     user_specific_posts = graphene.Field(User, id=graphene.String(), tag=graphene.String())
 
     def resolve_users(self, info):
@@ -32,8 +32,37 @@ class Query(graphene.ObjectType):
     def resolve_posts(self, info):
         return PostModel.objects()
 
-    def resolve_user(self, info, id):
-        return UserModel.objects().get(id=id)
+    def resolve_user(self, info, email):
+        return UserModel.objects().get(email=email)
 
 
-schema = graphene.Schema(query=Query, types=[Post, User])
+class CreateUser(graphene.Mutation):
+    id = graphene.ID()
+    last_name = graphene.String()
+    first_name = graphene.String()
+    email = graphene.String()
+    posts = graphene.List('app.schema.Post')
+
+    class Arguments:
+        email = graphene.String()
+        first_name = graphene.String()
+        last_name = graphene.String()
+
+    def mutate(self, info, email, first_name, last_name, user_id=None):
+        user = UserModel(email=email, first_name=first_name, last_name=last_name)
+        if user_id:
+            user.id = user_id
+        user.save()
+        return CreateUser(
+            id=user.id,
+            email=user.email,
+            first_name=user.first_name,
+            last_name=user.last_name
+        )
+
+
+class Mutation(graphene.ObjectType):
+    create_user = CreateUser.Field()
+
+
+schema = graphene.Schema(query=Query, mutation=Mutation, types=[Post, User])
