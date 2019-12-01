@@ -1,3 +1,2 @@
 #!/bin/sh
-sleep 5
-python run.py
+uwsgi --ini /src/uwsgi.ini
