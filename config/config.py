@@ -1,7 +1,10 @@
 import logging
 
 DEBUG = True
-TESTING = False
+TESTING = True
+
+HOST = '0.0.0.0'
+PORT = 5000
 
 # logger
 LOG_LEVEL = logging.DEBUG
