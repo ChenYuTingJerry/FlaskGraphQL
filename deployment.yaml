@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    run: flask-gql-deploy
+  name: flask-gql
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: flask-gql-deploy
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: flask-gql-deploy
+    spec:
+      containers:
+      - image: flask-gql
+        imagePullPolicy: Never
+        name: flask-gql-pod
+        ports:
+        - containerPort: 5000
+        resources: {}
+status: {}
+
