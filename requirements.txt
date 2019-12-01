@@ -3,4 +3,5 @@ Flask
 Flask-GraphQL
 flask-mongoengine
 flask-restplus
+graphql-core==2.2.1
 graphene
