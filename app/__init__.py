@@ -16,7 +16,18 @@ def add_graphql(app):
     )
 
 
-def create_app(config_name):
+def register_health_api(app):
+    from flask_restplus import Api
+    from flask_restplus import Resource
+    api = Api(app)
+
+    @api.route('/health')
+    class Health(Resource):
+        def get(self):
+            return 'ok'
+
+
+def create_app(config_name='config.config'):
     """
 
       :param config_name:
@@ -30,13 +41,13 @@ def create_app(config_name):
         from app import logger
         logger.init(app)
 
-        from app import db
-        mongo_db = db.mongodb
-        mongo_db.init(app)
-        db.init_db()
-
+        # from app import db
+        # mongo_db = db.mongodb
+        # mongo_db.init(app)
+        # db.init_db()
+        register_health_api(app)
         register_blueprints(app)
-        
+
         add_graphql(app)
 
     return app
